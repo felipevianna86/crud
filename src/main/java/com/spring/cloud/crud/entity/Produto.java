@@ -33,7 +33,7 @@ public class Produto implements Serializable {
     @Column(length = 10, nullable = false)
     private Double preco;
 
-    public static Produto convertProduto(ProdutoVO produtoVO){
+    public static Produto convertToProduto(ProdutoVO produtoVO){
         return new ModelMapper().map(produtoVO, Produto.class);
     }
 }

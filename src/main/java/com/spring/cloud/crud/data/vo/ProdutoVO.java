@@ -32,7 +32,7 @@ public class ProdutoVO implements Serializable {
     @JsonProperty("preco")
     private Double preco;
 
-    public static ProdutoVO convertProduto(Produto produto){
+    public static ProdutoVO convertToProdutoVO(Produto produto){
         return new ModelMapper().map(produto, ProdutoVO.class);
     }
 }
