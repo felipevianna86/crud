@@ -38,6 +38,7 @@ public class ProdutoController {
         return produtoVO;
     }
 
+    @GetMapping(produces = {"application/json", "application/xml", "application/x-yaml"})
     public ResponseEntity<?> findAll(@RequestParam(value = "page", defaultValue = "0") int page,
                                      @RequestParam(value = "limit", defaultValue = "10") int limit,
                                      @RequestParam(value = "direction", defaultValue = "asc") String direction){
@@ -53,5 +54,27 @@ public class ProdutoController {
         PagedModel<EntityModel<ProdutoVO>> pagedModel = assembler.toModel(produtos);
 
         return new ResponseEntity<>(pagedModel, HttpStatus.OK);
+    }
+
+    @PostMapping(produces = {"application/json", "application/xml", "application/x-yaml"}, consumes = {"application/json", "application/xml", "application/x-yaml"})
+    public ProdutoVO create(@RequestBody ProdutoVO produtoVO){
+       ProdutoVO produtoVOSaved = produtoService.create(produtoVO);
+       produtoVOSaved.add(linkTo( methodOn(ProdutoController.class).findById(produtoVOSaved.getId())).withSelfRel());
+
+       return produtoVOSaved;
+    }
+
+    @PutMapping(produces = {"application/json", "application/xml", "application/x-yaml"}, consumes = {"application/json", "application/xml", "application/x-yaml"})
+    public ProdutoVO update(@RequestBody ProdutoVO produtoVO){
+        ProdutoVO produtoVOSaved = produtoService.update(produtoVO);
+        produtoVOSaved.add(linkTo( methodOn(ProdutoController.class).findById(produtoVOSaved.getId())).withSelfRel());
+
+        return produtoVOSaved;
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long id){
+        produtoService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }
