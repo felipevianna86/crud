@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 
@@ -16,7 +17,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProdutoVO implements Serializable {
+public class ProdutoVO extends RepresentationModel<ProdutoVO> implements Serializable {
 
     private static final long serialVersionUID = -7294470821111409371L;
 
