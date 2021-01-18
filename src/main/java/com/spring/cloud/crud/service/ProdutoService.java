@@ -3,6 +3,7 @@ package com.spring.cloud.crud.service;
 import com.spring.cloud.crud.data.vo.ProdutoVO;
 import com.spring.cloud.crud.entity.Produto;
 import com.spring.cloud.crud.exception.ResourceNotFoundException;
+import com.spring.cloud.crud.message.ProdutoSendMessage;
 import com.spring.cloud.crud.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,15 +16,19 @@ import java.util.Optional;
 public class ProdutoService {
 
     private final ProdutoRepository produtoRepository;
+    private final ProdutoSendMessage produtoSendMessage;
 
     @Autowired
-    public ProdutoService(ProdutoRepository produtoRepository){
+    public ProdutoService(ProdutoRepository produtoRepository, ProdutoSendMessage produtoSendMessage){
         this.produtoRepository = produtoRepository;
+        this.produtoSendMessage = produtoSendMessage;
     }
 
     public ProdutoVO create(ProdutoVO produtoVO){
         Produto produto = produtoRepository.save(converterToProduto(produtoVO));
-        return converterToProdutoVO(produto);
+        ProdutoVO produtoVOCreated = converterToProdutoVO(produto);
+        produtoSendMessage.sendMessage(produtoVOCreated);
+        return produtoVOCreated;
     }
 
     public Page<ProdutoVO> findAll(Pageable pageable){
